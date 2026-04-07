@@ -12,12 +12,10 @@ import { ConfigModule } from '@nestjs/config';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: 'postgresql://postgres:HvkxViWoFNfGGKVwTsdOPEMnkWKjmhtl@hopper.proxy.rlwy.net:22667/railway', // Railway підставить посилання самостійно
+      url: process.env.DATABASE_URL, // Railway підставить посилання самостійно
       autoLoadEntities: true, // Сама знайде файли .entity.ts
       synchronize: true, // Автоматично створить таблиці в БД (ідеально для навчання)
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      ssl: { rejectUnauthorized: false },
     }),
     PostsModule,
   ],

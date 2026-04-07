@@ -3,13 +3,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  // Беремо порт з системних змінних Railway
   const port = process.env.PORT || 3000;
-
-  // КРИТИЧНО: додай '0.0.0.0' другим аргументом
   await app.listen(port, '0.0.0.0');
-
-  console.log(`Application is running on port: ${port}`);
 }
 bootstrap();
