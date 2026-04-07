@@ -16,8 +16,8 @@ import { ConfigModule } from '@nestjs/config';
       autoLoadEntities: true, // Сама знайде файли .entity.ts
       synchronize: true, // Автоматично створить таблиці в БД (ідеально для навчання)
       ssl:
-        process.env.DATABASE_URL?.includes('railway.app') ||
-        process.env.DATABASE_URL?.includes('proxy.rlwy.net')
+        process.env.DATABASE_URL?.includes('proxy.rlwy.net') ||
+        process.env.DATABASE_URL?.includes('railway.app')
           ? { rejectUnauthorized: false }
           : false,
     }),
