@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PostsModule } from './posts/posts.module';
+import { AppController } from '@app/app.controller';
+import { AppService } from '@app/app.service';
+import { PostsModule } from '@app/posts/posts.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 
@@ -14,7 +14,10 @@ import { ConfigModule } from '@nestjs/config';
       type: 'postgres',
       url: process.env.DATABASE_URL, // Railway підставить посилання самостійно
       autoLoadEntities: true, // Сама знайде файли .entity.ts
-      synchronize: true, // Автоматично створить таблиці в БД (ідеально для навчання)
+      // Автоматично створює/змінює таблиці. Зручно локально, але може дропнути
+      // колонку з даними, тому вмикається лише явним DB_SYNCHRONIZE=true в .env.
+      // На Railway ця змінна не задана — отже там synchronize вимкнено.
+      synchronize: process.env.DB_SYNCHRONIZE === 'true',
       ssl: { rejectUnauthorized: false },
     }),
     PostsModule,
