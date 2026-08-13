@@ -16,6 +16,9 @@ export class PostEntity {
   @Column()
   title: string;
 
+  @Column({ type: 'varchar', length: 300, default: '' })
+  excerpt: string;
+
   @Column({ type: 'text' })
   content: string;
 

@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePostDto } from './post.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreatePostDto, PostDetailDto, PostListItemDto } from './post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostEntity } from './post.entity';
 import { Repository } from 'typeorm';
@@ -11,12 +11,43 @@ export class PostsService {
     private postsRepository: Repository<PostEntity>,
   ) {}
 
-  async createPost(createPostDto: CreatePostDto) {
+  async createPost(createPostDto: CreatePostDto): Promise<PostDetailDto> {
     const newPost = this.postsRepository.create(createPostDto);
-    return await this.postsRepository.save(newPost);
+    return this.toDetail(await this.postsRepository.save(newPost));
   }
 
-  async findAll(): Promise<PostEntity[]> {
-    return await this.postsRepository.find();
+  async findAll(): Promise<PostListItemDto[]> {
+    // content не потрапляє в SELECT — важкий текст не читається з БД
+    const posts = await this.postsRepository.find({
+      select: ['id', 'category_id', 'title', 'excerpt', 'author', 'createdAt'],
+      order: { createdAt: 'DESC' },
+    });
+    return posts.map((post) => ({
+      id: post.id,
+      category_id: post.category_id,
+      title: post.title,
+      excerpt: post.excerpt,
+      author: post.author,
+      createdAt: post.createdAt,
+    }));
+  }
+
+  async findOne(id: number): Promise<PostDetailDto> {
+    const post = await this.postsRepository.findOneBy({ id });
+    if (!post) {
+      throw new NotFoundException(`Пост з id ${id} не знайдено`);
+    }
+    return this.toDetail(post);
+  }
+
+  private toDetail(post: PostEntity): PostDetailDto {
+    return {
+      id: post.id,
+      category_id: post.category_id,
+      title: post.title,
+      content: post.content,
+      author: post.author,
+      createdAt: post.createdAt,
+    };
   }
 }
