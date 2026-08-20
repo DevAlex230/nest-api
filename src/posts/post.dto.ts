@@ -11,6 +11,16 @@ export class CreatePostDto {
   @IsInt()
   category_id?: number;
 
+  @IsOptional()
+  @IsString()
+  @MaxLength(2048)
+  preview_img?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(2048)
+  main_img?: string;
+
   @IsNotEmpty()
   @IsString()
   title: string;
@@ -34,6 +44,7 @@ export class PostListItemDto {
   id: number;
   category_id?: number;
   title: string;
+  preview_img?: string;
   excerpt: string;
   author: string;
   createdAt: Date;
@@ -43,6 +54,7 @@ export class PostDetailDto {
   id: number;
   category_id?: number;
   title: string;
+  main_img?: string;
   content: string;
   author: string;
   createdAt: Date;
