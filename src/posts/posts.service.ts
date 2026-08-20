@@ -19,13 +19,22 @@ export class PostsService {
   async findAll(): Promise<PostListItemDto[]> {
     // content не потрапляє в SELECT — важкий текст не читається з БД
     const posts = await this.postsRepository.find({
-      select: ['id', 'category_id', 'title', 'excerpt', 'author', 'createdAt'],
+      select: [
+        'id',
+        'category_id',
+        'title',
+        'preview_img',
+        'excerpt',
+        'author',
+        'createdAt',
+      ],
       order: { createdAt: 'DESC' },
     });
     return posts.map((post) => ({
       id: post.id,
       category_id: post.category_id,
       title: post.title,
+      preview_img: post.preview_img,
       excerpt: post.excerpt,
       author: post.author,
       createdAt: post.createdAt,
@@ -45,6 +54,7 @@ export class PostsService {
       id: post.id,
       category_id: post.category_id,
       title: post.title,
+      main_img: post.main_img,
       content: post.content,
       author: post.author,
       createdAt: post.createdAt,

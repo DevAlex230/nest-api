@@ -13,6 +13,13 @@ export class PostEntity {
   @Column({ nullable: true })
   category_id: number;
 
+  // text, а не varchar(255) — довгі URL не мають падати з помилкою БД
+  @Column({ type: 'text', nullable: true })
+  preview_img: string;
+
+  @Column({ type: 'text', nullable: true })
+  main_img: string;
+
   @Column()
   title: string;
 
