@@ -3,7 +3,10 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { CategoryEntity } from '@app/posts/category.entity';
 
 @Entity('posts') // Назва таблиці в БД
 export class PostEntity {
@@ -12,6 +15,14 @@ export class PostEntity {
 
   @Column({ nullable: true })
   category_id: number;
+
+  @ManyToOne(() => CategoryEntity, (category) => category.posts, {
+    nullable: true,
+    onDelete: 'SET NULL', // видалення категорії не має вбивати пости
+  })
+  @JoinColumn({ name: 'category_id' }) // прив'язка до вже існуючої колонки
+  // | null — і бо колонка nullable, і бо onDelete: SET NULL
+  category: CategoryEntity | null;
 
   // text, а не varchar(255) — довгі URL не мають падати з помилкою БД
   @Column({ type: 'text', nullable: true })

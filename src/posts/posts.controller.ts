@@ -5,8 +5,14 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
 } from '@nestjs/common';
-import { CreatePostDto, PostDetailDto, PostListItemDto } from './post.dto';
+import {
+  CreatePostDto,
+  PostDetailDto,
+  PostListItemDto,
+  PostsQueryDto,
+} from './post.dto';
 import { PostsService } from './posts.service';
 
 @Controller('posts')
@@ -14,8 +20,8 @@ export class PostsController {
   constructor(private postsService: PostsService) {}
 
   @Get()
-  findAll(): Promise<PostListItemDto[]> {
-    return this.postsService.findAll();
+  findAll(@Query() query: PostsQueryDto): Promise<PostListItemDto[]> {
+    return this.postsService.findAll(query);
   }
 
   @Get(':id')
