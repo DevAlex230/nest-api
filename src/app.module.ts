@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from '@app/app.controller';
 import { AppService } from '@app/app.service';
 import { PostsModule } from '@app/posts/posts.module';
+import { CategoriesModule } from '@app/categories/categories.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 
@@ -21,6 +22,7 @@ import { ConfigModule } from '@nestjs/config';
       ssl: { rejectUnauthorized: false },
     }),
     PostsModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
